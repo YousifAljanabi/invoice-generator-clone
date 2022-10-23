@@ -34,45 +34,9 @@
         id="printTemplate"
         x-data='{
           subtotal : getSubTotal(),
-          items: [
-          `<div
-          x-data="{
-          quantity: 1,
-          rate: 0,
-          }"
-        >
-          {% comment "" %}x-ref="items"{% endcomment %}
-          <div class="grid grid-cols-10 py-1.5">
-            <input
-              type="text"
-              placeholder="Item/product name"
-              class="col-span-7 pl-3"
-            />
-            <input
-              type="text"
-              value="1"
-              x-model="quantity"
-              placeholder="Quantity"
-              class="w-fit pl-3"
-            />
-            <input
-              type="text"
-              value="0"
-              x-model="rate"
-              placeholder="0$"
-              class="w-fit pl-3"
-            />
-            <div class="pr-3 text-center">
-              <div
-                class="amount"
-                x-text="Number(quantity) * Number(rate)"
-              ></div>
-            </div>
-          </div>
-        </div>`,
-        ]}'
+          items: []}'
       >
-        <div class="p-4">
+        <div class="p-4" id="page">
           <form
             action=""
             class="py-4"
@@ -270,43 +234,7 @@
 
               <div class="py-1.5">
                 <button
-                  x-on:click='items.push(
-                                       `<div
-                                       x-data="{
-                           quantity: 1,
-                           rate: 0,
-                           }"
-                         >
-                           {% comment "" %}x-ref="items"{% endcomment %}
-                           <div class="grid grid-cols-10 py-1.5">
-                             <input
-                               type="text"
-                               placeholder="Item/product name"
-                               class="col-span-7 pl-3"
-                             />
-                             <input
-                               type="text"
-                               value="1"
-                               x-model="quantity"
-                               placeholder="Quantity"
-                               class="w-fit pl-3"
-                             />
-                             <input
-                               type="text"
-                               value="0"
-                               x-model="rate"
-                               placeholder="0$"
-                               class="w-fit pl-3"
-                             />
-                             <div class="pr-3 text-center">
-                               <div
-                                 class="amount"
-                                 x-text="Number(quantity) * Number(rate)"
-                               ></div>
-                             </div>
-                           </div>
-                         </div>`
-                                     )'
+                  x-on:click='createItem()'
                   class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded"
                   type="button"
                 >
@@ -358,10 +286,28 @@
             </div>
             <button type="button" x-on:click="updatePieFact()">S</button>
           </form>
+          <form action="" class="hidden" id="addItemForm" onsubmit="return formSubmit(event)">
+            <label for="NewItem">Item</label>
+            <input type="text" name="newItem">
+            <label for="newQuantity">Quantity</label>
+            <input type="text" name="newQuantity">
+            <label for="newRate">Rate</label>
+            <input type="text" name="newRate">
+            <button type="sumbit" x-on:click="addItem">Add an item</button>
+          </form>
         </div>
       </div>
+      
     </div>
     <script>
+      function createItem(){
+        document.getElementById('form').className = 'hidden';
+        document.getElementById('addItemForm').className = '';
+      }
+      function formSumbit(event){
+        event.preventDefault;
+        return false
+      }
       function getSubTotal() {
         let n = 0;
         const elements = document.getElementsByClassName("amount");
