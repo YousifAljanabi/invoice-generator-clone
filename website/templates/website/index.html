@@ -212,12 +212,12 @@
                 >
                   Quantity
                 </div>
-                
+
                 <div
                   class="w-fit pl-3 text-white"
                   style="background-color: rgb(30 41 59)"
                 >
-                Rate
+                  Rate
                 </div>
                 <div
                   class="w-fit pl-3 text-white"
@@ -243,49 +243,44 @@
                 </button>
               </div>
             </div>
-            <div class="py-6">
-              <div class="grid grid-cols-10">
-                <div class="col-span-6"></div>
-                <div class="col-span-4 grid grid-cols-2">
-                  <div class="grid grid-rows-5">
-                    <input type="text" value="Subtotal" class="text-right" />
-                    <input type="text" value="Tax" class="text-right" />
-                    <input type="text" value="Total" class="text-right" />
-                    <input type="text" value="Amount Paid" class="text-right" />
-                    <input type="text" value="Balance Due" class="text-right" />
-                  </div>
-                  <div
-                    class="grid grid-rows-5 text-center"
-                    x-data="{tax: 0, amountPaid : 0}"
-                  >
-                    <div class="py-3" x-html="subtotal">3.0$</div>
-                    <div
-                      x-init="setInterval(() => subtotal = getSubTotal(), 100)"
-                    ></div>
-                    <input
-                      type="number"
-                      name=""
-                      id=""
-                      value="0"
-                      x-model="tax"
-                      class="text-center"
-                      placeholder="Tax"
-                    />
-                    <div x-html="subtotal + (tax/100)"></div>
-                    <input
-                      type="number"
-                      name=""
-                      id=""
-                      value="0"
-                      x-model="amountPaid"
-                      class="text-center"
-                    />
-                    <div x-html="subtotal + (tax/100) - amountPaid">3.0$</div>
-                  </div>
-                </div>
+            <div class="py-6" x-data="{tax: 0, amountPaid : 0}">
+              <span>Subtotal: </span> <span x-html="subtotal"></span>
+              <div
+                x-init="setInterval(() => subtotal = getSubTotal(), 100)"
+              ></div>
+              <div class="w-full">
+                <label for="taxes">Tax %: </label>
+                <input
+                  type="number"
+                  name="taxes"
+                  value="0"
+                  x-model="tax"
+                  class="text-center"
+                  placeholder="Tax"
+                />
               </div>
+              <span>Total: </span><span x-html="subtotal + (tax/100)"></span>
+              <br />
+              <div class="w-full">
+                <label for="amountPaid">Amount Paid $: </label>
+                <input
+                  type="number"
+                  name="amountPaid"
+                  id=""
+                  value="0"
+                  x-model="amountPaid"
+                  class="text-center"
+                />
+              </div>
+              <span>Balance Due: </span> <span x-html="subtotal + (tax/100) - amountPaid"></span>
             </div>
-            <button type="button" x-on:click="updatePieFact()">S</button>
+            <button
+              type="button"
+              x-on:click="printInvoice()"
+              class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded"
+            >
+              Print
+            </button>
           </form>
           <form
             class="hidden"
