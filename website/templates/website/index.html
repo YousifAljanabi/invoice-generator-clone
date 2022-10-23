@@ -443,34 +443,6 @@
         document.getElementById("invoiceIDInfo").className = "hidden";
         return false;
       }
-      var URL = "{% url 'view' %}";
-      var printContents = document.getElementById("printTemplate").innerHTML;
-      function updatePieFact() {
-        var csrftoken = $.cookie("csrftoken");
-
-        function csrfSafeMethod(method) {
-          // these HTTP methods do not require CSRF protection
-          return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
-        }
-
-        $.ajaxSetup({
-          beforeSend: function (xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-              xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-          },
-        });
-
-        $.ajax(URL, {
-          type: "POST",
-          data: {
-            printContents: printContents,
-          },
-          success: function () {
-            alert("Saved!");
-          },
-        });
-      }
     </script>
   </body>
 </html>
