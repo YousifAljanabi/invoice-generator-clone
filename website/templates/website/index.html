@@ -33,17 +33,13 @@
         x-ref="printTemplate"
         id="printTemplate"
         x-data="fetchData(items, subtotal)"
+        x-cloak
       >
-        <div class="p-4">
-          <form
-            action=""
-            class="py-4"
-            id="form"
-            x-on:submit="event.preventDefault();"
-          >
+        <div class="p-4" id="page">
+          <form action="" class="py-4" id="form">
             {% csrf_token %}
             <div class="flex justify-between">
-              <div class="relative w-52 border border-gray-400 h-24">
+              <div class="relative w-52 border border-gray-400 h-32">
                 <div class="py-8">
                   <div
                     class="text-gray-400 text-center text-lg font-bold items-center flex justify-center"
@@ -66,76 +62,116 @@
                     </svg>
                     <span class="p-1">Add your logo</span>
                   </div>
-                  {% comment "TODO" %}<img src="" alt="" class="hidden" />
-                  {%endcomment %}
-                  <input
-                    type="file"
-                    name=""
-                    id=""
-                    class="w-full absolute left-0 p-0 appearance-none opacity-0 top-0"
-                    style="height: 20px"
+                  <img
+                    src=""
+                    alt=""
+                    id="image"
+                    class="hidden object-cover w-full h-32 absolute left-0 p-0 top-0"
                   />
                   <input
                     type="file"
                     name=""
                     id=""
-                    class="w-full absolute left-0 p-0 appearance-none opacity-0 top-5"
-                    style="height: 20px"
-                  />
-                  <input
-                    type="file"
-                    name=""
-                    id=""
-                    class="w-full absolute left-0 p-0 appearance-none opacity-0 top-10"
-                    style="height: 20px"
-                  />
-                  <input
-                    type="file"
-                    name=""
-                    id=""
-                    class="w-full absolute left-0 p-0 appearance-none opacity-0 top-15"
-                    style="height: 20px"
-                  />
-                  <input
-                    type="file"
-                    name=""
-                    id=""
-                    class="w-full absolute left-0 p-0 appearance-none opacity-0 top-20"
-                    style="height: 20px"
+                    class="w-full absolute left-0 p-0 appearance-none opacity-0 top-0 h-32"
+                    onchange="let file = this.files[0]; 
+					          var reader = new FileReader();
+					          reader.onload = function (e) {
+						        var image = document.getElementById('image');
+                    image.src = e.target.result;
+                    image.className = 'object-cover w-full h-32 absolute left-0 p-0 top-0';
+					          };
+					          reader.readAsDataURL(file);
+				            "
                   />
                 </div>
               </div>
               <div class="grid grid-rows-2">
                 <div>
-                  <input
-                    type="text"
-                    value="INVOICE"
-                    class="text-2xl text-right"
-                  />
+                  <div class="text-2xl text-right">INVOICE</div>
                 </div>
                 <div>
                   <span
                     class="py-1.5 px-3 text-center border border-gray-300 items-center border-solid rounded"
                     >#</span
                   >
+                  <div
+                    id="invoiceIDInfo"
+                    x-text="invoiceID"
+                    class="hidden inline py-1.5 px-3 text-center border border-gray-300 items-center border-solid rounded"
+                  ></div>
                   <input
+                    id="invoiceIDInput"
                     type="text"
+                    x-model="invoiceID"
                     class="py-1.5 px-3 text-center border border-gray-300 items-center border-solid rounded"
                   />
                 </div>
               </div>
             </div>
-            <div class="grid grid-cols-2 pt-10">
-              <div class="grid grid-rows-3 gap-4">
+            <div class="grid grid-cols-2 pt-10 hidden" id="invoiceInfo">
+              <div class="grid grid-rows-2 gap-4">
+                <div>Bill From:</div>
+                  <br />
+                <div
+                  class="h-16 pl-2 w-72 border border-gray-400"
+                  x-text="invoiceFrom"
+                ></div>
+
+                <div>
+                  <div>Bill to:</div>
+                  <br />
+                  <div
+                    class="h-16 pl-2 w-72 border border-gray-400"
+                    x-text="invoiceTo"
+                  ></div>
+                </div>
+              </div>
+              <div class="grid grid-cols-3 gap-2">
+                <div class="grid grid-rows-4">
+                  <label for="date" class="px-2">Date</label>
+                  <label for="terms" class="px-2">Terms</label>
+                  <label for="due_date" class="px-2">Due Date</label>
+                  <label for="po_number" class="px-2">PO Number</label>
+                </div>
+                <div class="col-span-2 grid grid-rows-4">
+                  <div>
+                    <div
+                      class="border border-gray-400 px-2"
+                      x-text="date"
+                    ></div>
+                  </div>
+                  <div>
+                    <div
+                      class="border border-gray-400 px-2"
+                      x-text="terms"
+                    ></div>
+                  </div>
+                  <div>
+                    <div
+                      class="border border-gray-400 px-2"
+                      x-text="dueDate"
+                    ></div>
+                  </div>
+                  <div class="">
+                    <div
+                      class="border border-gray-400 px-2"
+                      x-text="poNumber"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 pt-10" id="invoiceInputs">
+              <div class="grid grid-rows-2 gap-4">
                 <input
                   type="text"
-                  placeholder="Who is this invoice from?"
+                  placeholder="Who is this invoice from? (required)"
                   class="h-16 pl-2 w-72 border border-gray-400"
-                  required
+                  x-model="invoiceFrom"
                 />
 
                 <div>
-                  <input type="text" value="Bill to" />
+                  <div>Bill to:</div>
                   <br />
                   <input
                     type="text"
@@ -143,17 +179,7 @@
                     id=""
                     placeholder="who is this invoice to? (required)"
                     class="h-16 pl-2 w-72 border border-gray-400"
-                  />
-                </div>
-                <div>
-                  <input type="text" name="" value="Ship to" />
-                  <br />
-                  <input
-                    type="text"
-                    name=""
-                    id=""
-                    placeholder="Address to ship"
-                    class="h-16 pl-2 w-72 border border-gray-400"
+                    x-model="invoiceTo"
                   />
                 </div>
               </div>
@@ -167,9 +193,10 @@
                 <div class="col-span-2 grid grid-rows-4">
                   <div>
                     <input
-                      type="date"
+                      type="text"
                       name="date"
                       class="border border-gray-400 px-2"
+                      x-model="date"
                     />
                   </div>
                   <div>
@@ -177,13 +204,15 @@
                       type="text"
                       name="terms"
                       class="border border-gray-400 px-2"
+                      x-model="terms"
                     />
                   </div>
                   <div>
                     <input
-                      type="date"
+                      type="text"
                       name="due_date"
                       class="border border-gray-400 px-2"
+                      x-model="dueDate"
                     />
                   </div>
                   <div class="">
@@ -191,6 +220,7 @@
                       type="text"
                       name="po_number"
                       class="border border-gray-400 px-2"
+                      x-model="poNumber"
                     />
                   </div>
                 </div>
@@ -211,6 +241,7 @@
                 >
                   Quantity
                 </div>
+
                 <div
                   class="w-fit pl-3 text-white"
                   style="background-color: rgb(30 41 59)"
@@ -228,6 +259,7 @@
                 <template x-for="item in items">
                   <div x-html="item"></div>
                 </template>
+                <div></div>
               </div>
 
               <div class="py-1.5">
@@ -235,39 +267,61 @@
                   x-on:click="createItem()"
                   class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded"
                   type="button"
+                  id="lineItemButton"
                 >
                   Line Item +
                 </button>
               </div>
             </div>
             <div class="py-6">
-              <div class="text-center" x-data="{tax: 0, amountPaid : 0}">
-                <div class="w-full">Subtotal</div>
-                <div class="py-3 w-full" x-html="subtotal"></div>
-                <div
-                  x-init="setInterval(() => subtotal = getSubTotal(), 100)"
-                ></div>
-
-                <input
-                  type="number"
-                  value="Tax"
-                  x-model="tax"
-                  class="text-center"
-                  placeholder="Tax %"
-                />
-                <br />
-                <input
-                  type="number"
-                  value="Tax"
-                  x-model="amountPaid"
-                  class="text-center"
-                  placeholder="Amount Paid $"
-                />
-                <div class="">Balance Due</div>
-                <div x-html="subtotal + (tax/100) - amountPaid"></div>
+              <span>Subtotal: </span> <span x-html="subtotal"></span>
+              <div
+                x-init="setInterval(() => subtotal = getSubTotal(), 100)"
+              ></div>
+              <div class="w-full hidden" id="taxInfo">
+                <span>Tax %: </span
+                ><span x-text="tax" class="text-center"> </span>
               </div>
+              <div class="w-full" id="taxInput">
+                <label for="taxes">Tax %: </label>
+                <input
+                  type="number"
+                  name="taxes"
+                  value="0"
+                  x-model="tax"
+                  class="text-center border border-gray-400"
+                  placeholder="Tax"
+                />
+              </div>
+              <span>Total: </span
+              ><span x-html="subtotal + subtotal * (tax/100)"></span>
+              <br />
+              <div class="w-full hidden" id="amountPaidInfo">
+                <span>Amount Paid $: </span
+                ><span x-text="amountPaid" class="text-center"></span>
+              </div>
+              <div class="w-full" id="amountPaidInput">
+                <label for="amountPaid">Amount Paid $: </label>
+                <input
+                  type="number"
+                  name="amountPaid"
+                  id=""
+                  value="0"
+                  x-model="amountPaid"
+                  class="text-center border border-gray-400"
+                />
+              </div>
+              <span>Balance Due: </span>
+              <span
+                x-html="subtotal + subtotal * (tax/100) - amountPaid"
+              ></span>
             </div>
-            <button type="submit" x-on:click="printInvoice()" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded">
+            <button
+              type="button"
+              x-on:click="printInvoice()"
+              class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded"
+              id="printButton"
+            >
               Print
             </button>
           </form>
@@ -277,12 +331,12 @@
             x-on:submit="event.preventDefault(); formSumbit(items);"
           >
             <label for="NewItem">Item</label>
-            <input type="text" name="newItem" id="newItem" />
+            <input type="text" name="newItem" id="newItem" class="border border-gray-400"/>
             <label for="newQuantity">Quantity</label>
-            <input type="number" name="newQuantity" id="newQuantity" />
+            <input type="number" name="newQuantity" id="newQuantity" class="border border-gray-400"/>
             <label for="newRate">Rate</label>
-            <input type="number" name="newRate" id="newRate" />
-            <button type="sumbit">Add an item</button>
+            <input type="number" name="newRate" id="newRate" class="border border-gray-400"/>
+            <button type="sumbit" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded">Add an item</button>
           </form>
         </div>
       </div>
@@ -294,6 +348,17 @@
         return {
           items: items,
           subtotal: subtotal,
+          invoiceNumber: 0,
+          invoiceFrom: "",
+          invoiceTo: "",
+          billTo: "",
+          date: "",
+          terms: "",
+          dueDate: "",
+          poNumber: "",
+          tax: 0,
+          amountPaid: 0,
+          invoiceID: "",
         };
       }
       function createItem() {
@@ -306,42 +371,35 @@
         var newItem = document.getElementById("newItem").value;
         items.push(`<div class="grid grid-cols-10">
           <div
-            class="col-span-7 pl-3 "
-            
+            class="col-span-7 pl-3"
           >
             ${newItem}
           </div>
 
           <div
-            class="w-fit pl-3 "
+            class="w-fit pl-3"
             
           >
             ${newQuantity}
           </div>
+          
           <div
-            class="w-fit pl-3 "
+            class="w-fit pl-3"
             
           >
-            ${newRate}
+          ${newRate}
           </div>
           <div
             class="w-fit pl-3"
-            id="amount"
-            
+           
           >
-            <div
-            class="amount"
-            x-html="Number(${newQuantity}) * Number(${newRate})"
-            >
+            <div class="amount" x-text="Number(${newQuantity}) * Number(${newRate})">
 
             </div>
           </div>
         </div>`);
         document.getElementById("form").className = "py-4";
         document.getElementById("addItemForm").className = "hidden";
-        document.getElementById("newRate").value = "";
-        document.getElementById("newQuantity").value = "";
-        document.getElementById("newItem").value = "";
       }
       function getSubTotal() {
         let n = 0;
@@ -352,11 +410,37 @@
         return n;
       }
       function printInvoice() {
+        document.getElementById("taxInput").className = "hidden";
+        document.getElementById("taxInfo").className = "w-full";
+        document.getElementById("amountPaidInput").className = "hidden";
+        document.getElementById("amountPaidInfo").className = "w-full";
+        document.getElementById("invoiceInputs").className = "hidden";
+        document.getElementById("invoiceIDInput").className = "hidden";
+        document.getElementById("printButton").className = "hidden";
+        document.getElementById("lineItemButton").className = "hidden";
+        document.getElementById("invoiceIDInfo").className =
+          "inline py-1.5 px-3 text-center border border-gray-300 items-center border-solid rounded";
+        document.getElementById("invoiceInfo").className =
+          "grid grid-cols-2 pt-10";
+
         var printContents = document.getElementById("printTemplate").innerHTML;
         var originalContents = document.body.innerHTML;
         document.body.innerHTML = printContents;
+
         window.print();
+        document.getElementById("printButton").className = "bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded";
         document.body.innerHTML = originalContents;
+        document.getElementById("invoiceInputs").className =
+          "grid grid-cols-2 pt-10";
+        document.getElementById("invoiceInfo").className = "hidden";
+        document.getElementById("amountPaidInput").className = "w-full";
+        document.getElementById("amountPaidInfo").className = "hidden";
+        document.getElementById("taxInput").className = "w-full";
+        document.getElementById("taxInfo").className = "hidden";
+        document.getElementById("bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded").className = "hidden";
+        document.getElementById("invoiceIDInput").className =
+          "py-1.5 px-3 text-center border border-gray-300 items-center border-solid rounded";
+        document.getElementById("invoiceIDInfo").className = "hidden";
         return false;
       }
       var URL = "{% url 'view' %}";
