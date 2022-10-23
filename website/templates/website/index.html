@@ -39,7 +39,7 @@
           <form action="" class="py-4" id="form">
             {% csrf_token %}
             <div class="flex justify-between">
-              <div class="relative w-52 border border-gray-400 h-24">
+              <div class="relative w-52 border border-gray-400 h-32">
                 <div class="py-8">
                   <div
                     class="text-gray-400 text-center text-lg font-bold items-center flex justify-center"
@@ -62,42 +62,26 @@
                     </svg>
                     <span class="p-1">Add your logo</span>
                   </div>
-                  {% comment "TODO" %}<img src="" alt="" class="hidden" />
-                  {%endcomment %}
-                  <input
-                    type="file"
-                    name=""
-                    id=""
-                    class="w-full absolute left-0 p-0 appearance-none opacity-0 top-0"
-                    style="height: 20px"
+                  <img
+                    src=""
+                    alt=""
+                    id="image"
+                    class="hidden object-cover w-full h-32 absolute left-0 p-0 top-0"
                   />
                   <input
                     type="file"
                     name=""
                     id=""
-                    class="w-full absolute left-0 p-0 appearance-none opacity-0 top-5"
-                    style="height: 20px"
-                  />
-                  <input
-                    type="file"
-                    name=""
-                    id=""
-                    class="w-full absolute left-0 p-0 appearance-none opacity-0 top-10"
-                    style="height: 20px"
-                  />
-                  <input
-                    type="file"
-                    name=""
-                    id=""
-                    class="w-full absolute left-0 p-0 appearance-none opacity-0 top-15"
-                    style="height: 20px"
-                  />
-                  <input
-                    type="file"
-                    name=""
-                    id=""
-                    class="w-full absolute left-0 p-0 appearance-none opacity-0 top-20"
-                    style="height: 20px"
+                    class="w-full absolute left-0 p-0 appearance-none opacity-0 top-0 h-32"
+                    onchange="let file = this.files[0]; 
+					          var reader = new FileReader();
+					          reader.onload = function (e) {
+						        var image = document.getElementById('image');
+                    image.src = e.target.result;
+                    image.className = 'object-cover w-full h-32 absolute left-0 p-0 top-0';
+					          };
+					          reader.readAsDataURL(file);
+				            "
                   />
                 </div>
               </div>
@@ -126,6 +110,8 @@
             </div>
             <div class="grid grid-cols-2 pt-10 hidden" id="invoiceInfo">
               <div class="grid grid-rows-2 gap-4">
+                <div>Bill From:</div>
+                  <br />
                 <div
                   class="h-16 pl-2 w-72 border border-gray-400"
                   x-text="invoiceFrom"
@@ -281,6 +267,7 @@
                   x-on:click="createItem()"
                   class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded"
                   type="button"
+                  id="lineItemButton"
                 >
                   Line Item +
                 </button>
@@ -302,7 +289,7 @@
                   name="taxes"
                   value="0"
                   x-model="tax"
-                  class="text-center"
+                  class="text-center border border-gray-400"
                   placeholder="Tax"
                 />
               </div>
@@ -321,7 +308,7 @@
                   id=""
                   value="0"
                   x-model="amountPaid"
-                  class="text-center"
+                  class="text-center border border-gray-400"
                 />
               </div>
               <span>Balance Due: </span>
@@ -333,6 +320,7 @@
               type="button"
               x-on:click="printInvoice()"
               class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded"
+              id="printButton"
             >
               Print
             </button>
@@ -343,12 +331,12 @@
             x-on:submit="event.preventDefault(); formSumbit(items);"
           >
             <label for="NewItem">Item</label>
-            <input type="text" name="newItem" id="newItem" />
+            <input type="text" name="newItem" id="newItem" class="border border-gray-400"/>
             <label for="newQuantity">Quantity</label>
-            <input type="text" name="newQuantity" id="newQuantity" />
+            <input type="number" name="newQuantity" id="newQuantity" class="border border-gray-400"/>
             <label for="newRate">Rate</label>
-            <input type="text" name="newRate" id="newRate" />
-            <button type="sumbit">Add an item</button>
+            <input type="number" name="newRate" id="newRate" class="border border-gray-400"/>
+            <button type="sumbit" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded">Add an item</button>
           </form>
         </div>
       </div>
@@ -428,6 +416,8 @@
         document.getElementById("amountPaidInfo").className = "w-full";
         document.getElementById("invoiceInputs").className = "hidden";
         document.getElementById("invoiceIDInput").className = "hidden";
+        document.getElementById("printButton").className = "hidden";
+        document.getElementById("lineItemButton").className = "hidden";
         document.getElementById("invoiceIDInfo").className =
           "inline py-1.5 px-3 text-center border border-gray-300 items-center border-solid rounded";
         document.getElementById("invoiceInfo").className =
@@ -436,7 +426,9 @@
         var printContents = document.getElementById("printTemplate").innerHTML;
         var originalContents = document.body.innerHTML;
         document.body.innerHTML = printContents;
+
         window.print();
+        document.getElementById("printButton").className = "bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded";
         document.body.innerHTML = originalContents;
         document.getElementById("invoiceInputs").className =
           "grid grid-cols-2 pt-10";
@@ -445,6 +437,7 @@
         document.getElementById("amountPaidInfo").className = "hidden";
         document.getElementById("taxInput").className = "w-full";
         document.getElementById("taxInfo").className = "hidden";
+        document.getElementById("bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded").className = "hidden";
         document.getElementById("invoiceIDInput").className =
           "py-1.5 px-3 text-center border border-gray-300 items-center border-solid rounded";
         document.getElementById("invoiceIDInfo").className = "hidden";
