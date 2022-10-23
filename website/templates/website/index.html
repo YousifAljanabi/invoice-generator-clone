@@ -425,7 +425,7 @@
         window.print();
         
         document.body.innerHTML = originalContents;
-        document.getElementById("printButton").className = "bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded";
+        
         document.getElementById("invoiceInputs").className =
           "grid grid-cols-2 pt-10";
         document.getElementById("invoiceInfo").className = "hidden";
@@ -437,6 +437,7 @@
         document.getElementById("invoiceIDInput").className =
           "py-1.5 px-3 text-center border border-gray-300 items-center border-solid rounded";
         document.getElementById("invoiceIDInfo").className = "hidden";
+        document.getElementById("printButton").className = "bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded";
         document.getElementById("lineItemButton").className = "bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded";
         return false;
       }
