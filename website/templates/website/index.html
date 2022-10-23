@@ -1,4 +1,3 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -6,14 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Invoice Generator Clone</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script
       defer
       src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
-    <script src="{% static 'website/index.js' %}"></script>
-    <script src="{% static 'website/carhartl-jquery-cookie-92b7715/jquery.cookie.js' %}"></script>
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.1.2/tailwind.min.css"
@@ -417,7 +413,7 @@
         document.getElementById("invoiceInputs").className = "hidden";
         document.getElementById("invoiceIDInput").className = "hidden";
         document.getElementById("printButton").className = "hidden";
-        document.getElementById("lineItemButton").className = "hidden";
+        document.getElementById("lineItemButton").className = "bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded";
         document.getElementById("invoiceIDInfo").className =
           "inline py-1.5 px-3 text-center border border-gray-300 items-center border-solid rounded";
         document.getElementById("invoiceInfo").className =
@@ -426,10 +422,10 @@
         var printContents = document.getElementById("printTemplate").innerHTML;
         var originalContents = document.body.innerHTML;
         document.body.innerHTML = printContents;
-
         window.print();
-        document.getElementById("printButton").className = "bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded";
+        
         document.body.innerHTML = originalContents;
+        document.getElementById("printButton").className = "bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded";
         document.getElementById("invoiceInputs").className =
           "grid grid-cols-2 pt-10";
         document.getElementById("invoiceInfo").className = "hidden";
@@ -441,6 +437,7 @@
         document.getElementById("invoiceIDInput").className =
           "py-1.5 px-3 text-center border border-gray-300 items-center border-solid rounded";
         document.getElementById("invoiceIDInfo").className = "hidden";
+        document.getElementById("lineItemButton").className = "bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded";
         return false;
       }
     </script>
