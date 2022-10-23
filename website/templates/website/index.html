@@ -36,11 +36,7 @@
         x-cloak
       >
         <div class="p-4" id="page">
-          <form
-            action=""
-            class="py-4"
-            id="form"
-          >
+          <form action="" class="py-4" id="form">
             {% csrf_token %}
             <div class="flex justify-between">
               <div class="relative w-52 border border-gray-400 h-24">
@@ -107,19 +103,22 @@
               </div>
               <div class="grid grid-rows-2">
                 <div>
-                  <input
-                    type="text"
-                    value="INVOICE"
-                    class="text-2xl text-right"
-                  />
+                  <div class="text-2xl text-right">INVOICE</div>
                 </div>
                 <div>
                   <span
                     class="py-1.5 px-3 text-center border border-gray-300 items-center border-solid rounded"
                     >#</span
                   >
+                  <div
+                    id="invoiceIDInfo"
+                    x-text="invoiceID"
+                    class="hidden inline py-1.5 px-3 text-center border border-gray-300 items-center border-solid rounded"
+                  ></div>
                   <input
+                    id="invoiceIDInput"
                     type="text"
+                    x-model="invoiceID"
                     class="py-1.5 px-3 text-center border border-gray-300 items-center border-solid rounded"
                   />
                 </div>
@@ -371,6 +370,7 @@
           poNumber: "",
           tax: 0,
           amountPaid: 0,
+          invoiceID: "",
         };
       }
       function createItem() {
@@ -423,12 +423,13 @@
       }
       function printInvoice() {
         document.getElementById("taxInput").className = "hidden";
-        document.getElementById("taxInfo").className =
-          "w-full";
+        document.getElementById("taxInfo").className = "w-full";
         document.getElementById("amountPaidInput").className = "hidden";
-        document.getElementById("amountPaidInfo").className =
-          "w-full";
+        document.getElementById("amountPaidInfo").className = "w-full";
         document.getElementById("invoiceInputs").className = "hidden";
+        document.getElementById("invoiceIDInput").className = "hidden";
+        document.getElementById("invoiceIDInfo").className =
+          "inline py-1.5 px-3 text-center border border-gray-300 items-center border-solid rounded";
         document.getElementById("invoiceInfo").className =
           "grid grid-cols-2 pt-10";
 
@@ -441,11 +442,12 @@
           "grid grid-cols-2 pt-10";
         document.getElementById("invoiceInfo").className = "hidden";
         document.getElementById("amountPaidInput").className = "w-full";
-        document.getElementById("amountPaidInfo").className =
-          "hidden";
+        document.getElementById("amountPaidInfo").className = "hidden";
         document.getElementById("taxInput").className = "w-full";
-        document.getElementById("taxInfo").className =
-          "hidden";
+        document.getElementById("taxInfo").className = "hidden";
+        document.getElementById("invoiceIDInput").className =
+          "py-1.5 px-3 text-center border border-gray-300 items-center border-solid rounded";
+        document.getElementById("invoiceIDInfo").className = "hidden";
         return false;
       }
       var URL = "{% url 'view' %}";
